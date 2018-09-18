@@ -82,7 +82,7 @@ fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
                    t3: Double, v3: Double): Double {
     val hals = (v1 * t1 + v2 * t2 + v3 * t3) / 2 // половина пути
-    val s1 = v1 * t2
+    val s1 = v1 * t1
     val s2 = v2 * t2
 
     return when {
