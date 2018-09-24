@@ -128,9 +128,7 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int{
     return when {
-        abs(bishopX - kingX) == abs(bishopY - kingY) &&
-                (kingX == rookX || kingY == rookY) -> 3
-
+        abs(bishopX - kingX) == abs(bishopY - kingY) && (kingX == rookX || kingY == rookY) -> 3
         abs(bishopX - kingX) == abs(bishopY - kingY) -> 2
         kingX == rookX || kingY == rookY -> 1
         else -> 0
@@ -170,7 +168,7 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int{
     val mi = arrayOf(a, b, c, d).min()
 
     return when {
-        (b in (a + 1 until c) && c <d) || (d in (c + 1 until a) && a < b) -> -1
+        (a <= b && b < c && c <= d) || (c <= d && d < a && a <= b) -> -1
         ma == b && mi == a -> d - c
         ma == b && mi == c -> d - a
         ma == d && mi == a -> b - c
