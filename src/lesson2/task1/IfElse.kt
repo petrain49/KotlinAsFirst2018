@@ -104,11 +104,13 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int {
+    val a = kingX == rookX1 || kingY == rookY1
+    val b = kingX == rookX2 || kingY == rookY2
+
     return when {
-        (kingX == rookX1 || kingY == rookY1) &&
-                (kingX == rookX2 || kingY == rookY2) -> 3
-        kingX == rookX2 || kingY == rookY2 -> 2
-        kingX == rookX1 || kingY == rookY1 -> 1
+        a && b -> 3
+        b -> 2
+        a -> 1
         else -> 0
 
     }
@@ -164,15 +166,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int{
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int{
-    val ma = arrayOf(a, b, c, d).max()
-    val mi = arrayOf(a, b, c, d).min()
-
+    val e = listOf(a, b, c, d).sorted()
     return when {
         (a <= b && b < c && c <= d) || (c <= d && d < a && a <= b) -> -1
-        ma == b && mi == a -> d - c
-        ma == b && mi == c -> d - a
-        ma == d && mi == a -> b - c
-        ma == d && mi == c -> b - a
-        else -> 0
+        else -> e.elementAt(2) - e.elementAt(1)
     }
 }
