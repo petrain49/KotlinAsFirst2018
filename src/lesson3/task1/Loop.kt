@@ -4,7 +4,7 @@ package lesson3.task1
 import lesson1.task1.sqr
 import kotlin.math.*
 
-fun powint(a: Int, b: Int): Int {
+fun powInt(a: Int, b: Int): Int {
     var a1 = 1
     var b1 = b
     while (b1 > 0) {
@@ -113,16 +113,17 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    val c = m * n
-    var a = m
-    var b = n
-
+fun gcd(a: Int, b: Int): Int {
+    var a = a
+    var b = b
     while (a != 0 && b != 0) {
         if (a > b) a %= b else b %= a
     }
-    return c / (a + b)
+    return a + b
 }
+
+fun lcm(m: Int, n: Int): Int = m / gcd(m, n) * n
+
 
 /**
  * Простая
@@ -146,17 +147,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var c = 1
-    val kn = sqrt(n.toDouble()).toInt()
-    for (x in n / 2 downTo kn) {
-        if (n % x == 0) {
-            c = x
-            break
-        }
-    }
-    return c
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -165,14 +156,7 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var a = m
-    var b = n
-    while (a != 0 && b != 0) {
-        if (a > b) a %= b else b %= a
-    }
-    return a + b == 1
-}
+fun isCoPrime(m: Int, n: Int): Boolean = gcd(m, n) == 1
 
 /**
  * Простая
@@ -218,15 +202,16 @@ fun collatzSteps(x: Int): Int {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    var a = x
-    var an = x
-    var i = 3
-    while (abs(an) >= eps) {
-        an *= (-1) * x * x / (i * (i - 1))
+    var a = x % (2 * PI)
+    var an = x % (2 * PI)
+    var i = 3.0
+    while (true) {
+        an = -an * sqr(x) / (i * (i - 1))
+        if (abs(an) < eps) break
         a += an
-        i += 2
+        i += 2.0
     }
-    return sin(x) //уф, хоть так, а то, что сверху - не работает почему то
+    return a
 }
 
 /**
@@ -236,7 +221,19 @@ fun sin(x: Double, eps: Double): Double {
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double = cos(x) // ¯\_(ツ)_/¯
+fun cos(x: Double, eps: Double): Double {
+    val c = x % (2 * PI)
+    var a = 1.0
+    var an = 1.0
+    var i = 0.0
+    while (true) {
+        an = -an * sqr(c)  / (i + 1) / (i + 2)
+        if (abs(an) < eps) break
+        a += an
+        i += 2.0
+    }
+    return a
+}
 
 /**
  * Средняя
@@ -277,12 +274,12 @@ fun isPalindrome(n: Int): Boolean =
 fun hasDifferentDigits(n: Int): Boolean {
     var nc = n
     val c = n % 10
-    var ans = false
+    val ans = false
 
     do {
-        if (nc % 10 != c) ans = true
+        if (nc % 10 != c) return true
         nc /= 10
-    } while (nc > 0 && ans == false)
+    } while (nc > 0 && !ans)
 
     return ans
 }
@@ -297,17 +294,14 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var c = 0 ; var i = 1 ; var a = 0
+    var c = 0
+    var i = 1
 
     while (c < n) {
-        a = i * i
-        c += digitNumber(a)
+        c += digitNumber(sqr(i))
         i ++
     }
-    return when {
-        c == n -> a % 10
-        else -> a / powint(10, (c - n)) % 10
-    }
+    return sqr(i - 1) / powInt(10, (c - n)) % 10
 }
 
 /**
@@ -320,19 +314,12 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var c = 1 ; var a = 1
-    var f1 = 0 ; var f2 = 1; var fs = 0
+    var c = 1
+    var i = 1
 
     while (c < n) {
-        fs = f1 + f2
-        f1 = f2
-        f2 = fs
-
-        c += digitNumber(fs)
-        a = fs
+        i ++
+        c += digitNumber(fib(i))
     }
-    return when {
-        c == n -> a % 10
-        else -> a / powint(10, (c - n)) % 10
+    return fib(i) / powInt(10, (c - n)) % 10
     }
-}
