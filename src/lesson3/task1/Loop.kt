@@ -78,13 +78,13 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var nc = n
-    var c = 0
+    var n = n
+    var countNum = 0
     do {
-        c += 1
-        nc /= 10
-    } while (nc != 0)
-    return c
+        countNum += 1
+        n /= 10
+    } while (n != 0)
+    return countNum
 }
 
 /**
@@ -131,15 +131,15 @@ fun lcm(m: Int, n: Int): Int = m / gcd(m, n) * n
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var c = n
-    val kn = sqrt(n.toDouble()).toInt() + 1
-    for (x in 2..kn) {
+    var minD = n
+    val sN = sqrt(n.toDouble()).toInt() + 1
+    for (x in 2..sN) {
         if (n % x == 0) {
-            c = x
+            minD = x
             break
         }
     }
-    return c
+    return minD
 }
 
 /**
@@ -166,7 +166,8 @@ fun isCoPrime(m: Int, n: Int): Boolean = gcd(m, n) == 1
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean =
-        sqr(sqrt(max(m, n).toDouble()).toInt()) in m..n
+        sqr(ceil(sqrt(m.toDouble()))) in m..n
+        //sqr(sqrt(max(m, n).toDouble()).toInt()) in m..n
 
 /**
  * Средняя
@@ -185,13 +186,13 @@ fun squareBetweenExists(m: Int, n: Int): Boolean =
  * этого для какого-либо начального X > 0.
  */
 fun collatzSteps(x: Int): Int {
-    var c = 0
-    var z = x
-    while (z != 1) {
-        if (z % 2 == 0) z /= 2 else z = 3 * z + 1
-        ++ c
+    var countSteps = 0
+    var x = x
+    while (x != 1) {
+        if (x % 2 == 0) x /= 2 else x = 3 * x + 1
+        ++ countSteps
     }
-    return c
+    return countSteps
 }
 
 /**
@@ -202,16 +203,16 @@ fun collatzSteps(x: Int): Int {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    var a = x % (2 * PI)
-    var an = x % (2 * PI)
+    var sinX = x % (2 * PI)
+    var member = x % (2 * PI)
     var i = 3.0
     while (true) {
-        an = -an * sqr(x) / (i * (i - 1))
-        if (abs(an) < eps) break
-        a += an
+        member = -member * sqr(x) / (i * (i - 1))
+        if (abs(member) < eps) break
+        sinX += member
         i += 2.0
     }
-    return a
+    return sinX
 }
 
 /**
@@ -223,16 +224,16 @@ fun sin(x: Double, eps: Double): Double {
  */
 fun cos(x: Double, eps: Double): Double {
     val c = x % (2 * PI)
-    var a = 1.0
-    var an = 1.0
+    var cosX = 1.0
+    var member = 1.0
     var i = 0.0
     while (true) {
-        an = -an * sqr(c)  / (i + 1) / (i + 2)
-        if (abs(an) < eps) break
-        a += an
+        member = -member * sqr(c) / (i + 1) / (i + 2)
+        if (abs(member) < eps) break
+        cosX += member
         i += 2.0
     }
-    return a
+    return cosX
 }
 
 /**
@@ -243,13 +244,13 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var a = n
-    var b = 0
-    while (a > 0) {
-        b = b * 10 + a % 10
-        a /= 10
+    var n = n
+    var revert = 0
+    while (n > 0) {
+        revert = revert * 10 + n % 10
+        n /= 10
     }
-    return b
+    return revert
 }
 /**
  * Средняя
@@ -260,8 +261,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean =
-        n == revert(n)
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
@@ -272,14 +272,14 @@ fun isPalindrome(n: Int): Boolean =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var nc = n
-    val c = n % 10
+    var n = n
+    val digit = n % 10
     val ans = false
 
     do {
-        if (nc % 10 != c) return true
-        nc /= 10
-    } while (nc > 0 && !ans)
+        if (n % 10 != digit) return true
+        n /= 10
+    } while (n > 0 && !ans)
 
     return ans
 }
@@ -294,14 +294,14 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var c = 0
+    var sumDigits = 0
     var i = 1
 
-    while (c < n) {
-        c += digitNumber(sqr(i))
+    while (sumDigits < n) {
+        sumDigits += digitNumber(sqr(i))
         i ++
     }
-    return sqr(i - 1) / powInt(10, (c - n)) % 10
+    return sqr(i - 1) / powInt(10, (sumDigits - n)) % 10
 }
 
 /**
@@ -314,12 +314,12 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var c = 1
+    var sumDigits = 1
     var i = 1
 
-    while (c < n) {
+    while (sumDigits < n) {
         i ++
-        c += digitNumber(fib(i))
+        sumDigits += digitNumber(fib(i))
     }
-    return fib(i) / powInt(10, (c - n)) % 10
+    return fib(i) / powInt(10, (sumDigits - n)) % 10
     }
