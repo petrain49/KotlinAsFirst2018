@@ -76,8 +76,5 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val maxSideOfRectangle = max(r, s)
     val minSideOfRectangle = min(r, s)
     val sidesOfBrick = listOf(a, b, c).sorted()
-    return when {
-        sidesOfBrick.elementAt(0) <= minSideOfRectangle && sidesOfBrick.elementAt(1) <= maxSideOfRectangle -> true
-        else -> false
-    }
+    return sidesOfBrick.elementAt(0) <= minSideOfRectangle && sidesOfBrick.elementAt(1) <= maxSideOfRectangle
 }

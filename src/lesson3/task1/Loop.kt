@@ -78,12 +78,12 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var n = n
+    var nNew = n
     var countNum = 0
     do {
         countNum += 1
-        n /= 10
-    } while (n != 0)
+        nNew /= 10
+    } while (nNew != 0)
     return countNum
 }
 
@@ -114,12 +114,12 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun gcd(a: Int, b: Int): Int {
-    var a = a
-    var b = b
-    while (a != 0 && b != 0) {
-        if (a > b) a %= b else b %= a
+    var x = a
+    var y = b
+    while (x != 0 && y != 0) {
+        if (x > y) x %= y else y %= x
     }
-    return a + b
+    return x + y
 }
 
 fun lcm(m: Int, n: Int): Int = m / gcd(m, n) * n
@@ -187,9 +187,9 @@ fun squareBetweenExists(m: Int, n: Int): Boolean =
  */
 fun collatzSteps(x: Int): Int {
     var countSteps = 0
-    var x = x
-    while (x != 1) {
-        if (x % 2 == 0) x /= 2 else x = 3 * x + 1
+    var n = x
+    while (n != 1) {
+        if (n % 2 == 0) n /= 2 else n = 3 * n + 1
         ++ countSteps
     }
     return countSteps
@@ -244,11 +244,11 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var n = n
+    var x = n
     var revert = 0
-    while (n > 0) {
-        revert = revert * 10 + n % 10
-        n /= 10
+    while (x > 0) {
+        revert = revert * 10 + x % 10
+        x /= 10
     }
     return revert
 }
@@ -272,16 +272,15 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var n = n
-    val digit = n % 10
-    val ans = false
+    var x = n
+    val digit = x % 10
 
     do {
-        if (n % 10 != digit) return true
-        n /= 10
-    } while (n > 0 && !ans)
+        if (x % 10 != digit) return true
+        x /= 10
+    } while (x > 0)
 
-    return ans
+    return false
 }
 
 /**
@@ -322,4 +321,4 @@ fun fibSequenceDigit(n: Int): Int {
         sumDigits += digitNumber(fib(i))
     }
     return fib(i) / powInt(10, (sumDigits - n)) % 10
-    }
+}
