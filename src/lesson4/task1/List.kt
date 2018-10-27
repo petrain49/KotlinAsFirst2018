@@ -223,7 +223,8 @@ fun convert(n: Int, base: Int): List<Int> {
         ans.add(nNew % base)
         nNew /= base
     }
-    return ans.reversed()
+    if (ans.isNotEmpty()) return ans.reversed()
+    return listOf(0)
 }
 
 /**
@@ -253,7 +254,7 @@ fun convertToString(n: Int, base: Int): String {
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int {
-    val digitsNew: MutableList<Int> = digits.reversed().toMutableList<Int>()
+    val digitsNew = digits.reversed().toMutableList<Int>()
     for (x in 0 until digits.size) {
         digitsNew[x] *= powInt(base, x)
     }
@@ -271,14 +272,13 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     val list = listOf("0", "1", "2" , "3", "4", "5", "6", "7", "8", "9",
-            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k,", "l", "m",
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
 
-    val ans: MutableList<Int> = mutableListOf<Int>()
+    val ans = mutableListOf<Int>()
     for (x in str) {
         ans.add(list.indexOf(x.toString()))
     }
-    print(ans)
     return decimal(ans, base)
 }
 

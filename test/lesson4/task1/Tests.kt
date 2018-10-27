@@ -180,6 +180,7 @@ class Tests {
         assertEquals(listOf(1, 2, 1, 0), convert(100, 4))
         assertEquals(listOf(1, 3, 12), convert(250, 14))
         assertEquals(listOf(2, 14, 12), convert(1000, 19))
+        assertEquals(listOf(0), convert(0, 2))
     }
 
     @Test
@@ -212,6 +213,7 @@ class Tests {
         assertEquals(1000, decimalFromString("2ec", 19))
         assertEquals(35, decimalFromString("z", 36))
         assertEquals(Int.MAX_VALUE, decimalFromString("a02220281", 11))
+        assertEquals(2147483647, decimalFromString("5ehncka", 27))
     }
 
     @Test
