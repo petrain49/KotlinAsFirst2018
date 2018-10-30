@@ -9,7 +9,7 @@ fun powInt(a: Int, b: Int): Int {
     var b1 = b
     while (b1 > 0) {
         a1 *= a
-        -- b1
+        --b1
     }
     return a1
 }
@@ -203,11 +203,12 @@ fun collatzSteps(x: Int): Int {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
+    val c = x % (2 * PI)
     var sinX = x % (2 * PI)
     var member = x % (2 * PI)
     var i = 3.0
     while (true) {
-        member = -member * sqr(x) / (i * (i - 1))
+        member = -member * sqr(c) / (i * (i - 1))
         if (abs(member) < eps) break
         sinX += member
         i += 2.0
