@@ -163,7 +163,8 @@ fun times(a: List<Double>, b: List<Double>): Double {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0.0 при любом x.
  */
-fun polynom(p: List<Double>, x: Double): Double = p.map {it * x.pow(p.indexOf(it))}.sum()
+fun polynom(p: List<Double>, x: Double): Double = p.mapIndexed{i, it -> it * x.pow(i)}.sum()
+
 /**
  * Средняя
  *
@@ -188,9 +189,9 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  */
 fun factorize(n: Int): List<Int> {
     var nNew = n
-    var i = n
+    var i = sqrt(n.toDouble()).toInt() + 1
     val answrs = mutableListOf<Int>()
-    while (nNew > 1) {
+    while (nNew > 1 && i != 0) {
         while (nNew % i == 0 && isPrime(i)) {
             answrs.add(i)
             nNew /= i
