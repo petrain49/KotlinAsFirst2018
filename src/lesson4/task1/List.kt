@@ -7,6 +7,7 @@ import lesson3.task1.isPrime
 import lesson3.task1.powInt
 import lesson3.task1.revert
 import lesson9.task2.sumNeighbours
+import java.lang.StringBuilder
 import kotlin.math.*
 
 /**
@@ -189,9 +190,9 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  */
 fun factorize(n: Int): List<Int> {
     var nNew = n
-    var i = sqrt(n.toDouble()).toInt() + 1
+    var i = n
     val answrs = mutableListOf<Int>()
-    while (nNew > 1 && i != 0) {
+    while (nNew > 1) {
         while (nNew % i == 0 && isPrime(i)) {
             answrs.add(i)
             nNew /= i
@@ -220,12 +221,11 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
 fun convert(n: Int, base: Int): List<Int> {
     val ans = mutableListOf<Int>()
     var nNew = n
-    while (nNew >= 1) {
+    do {
         ans.add(nNew % base)
         nNew /= base
-    }
-    if (ans.isNotEmpty()) return ans.reversed()
-    return listOf(0)
+    } while (nNew >= 1)
+    return ans.reversed()
 }
 
 /**
@@ -241,10 +241,7 @@ fun convertToString(n: Int, base: Int): String {
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
 
-    var ans = ""
-    for (e in convert(n, base)) ans += list[e]
-
-    return ans
+    return convert(n, base).map {list[it]}.joinToString("")
 }
 
 /**
@@ -277,9 +274,7 @@ fun decimalFromString(str: String, base: Int): Int {
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
 
     val ans = mutableListOf<Int>()
-    for (x in str) {
-        ans.add(list.indexOf(x.toString()))
-    }
+    str.map {ans.add(list.indexOf(it.toString()))}
     return decimal(ans, base)
 }
 
@@ -292,36 +287,24 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val listRome = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
-    val list = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-    var ans = ""
+    val list = listOf(Pair(1, "I"), Pair(4, "IV"), Pair(5, "V"),
+            Pair(9, "IX"), Pair(10, "X"), Pair(40, "XL"), Pair(50, "L"),
+            Pair(90, "XC"), Pair(100, "C"), Pair(400, "CD"), Pair(500, "D"),
+            Pair(900, "CM"), Pair(1000, "M")).reversed()
+    val ans = StringBuilder()
     var x = n
 
     while (x > 0) {
-        loop@ for (i in 0 until list.size) when {
-            x >= list.last() -> {
-                ans += listRome.last()
-                x -= list.last()
-                break@loop
-            }
-
-            x - list[i] == 0 -> {
-                ans += listRome[i]
-                x -= list[i]
-                break@loop
-            }
-
-            x - list[i] < 0 -> {
-                ans += listRome[i - 1]
-                x -= list[i - 1]
-                break@loop
-            }
+        for ((a, b) in list) if (x - a >= 0) {
+            x -= a
+            ans.append(b)
+            break
         }
     }
-    return ans
+    return ans.toString()
 }
 
-/**
+/*/**
  * Очень сложная
  *
  * Записать заданное натуральное число 1..999999 прописью по-русски.
@@ -337,7 +320,8 @@ fun three(n: Int): List<String> { //разбиваю число на списо�
     while (nNew != 0) {
         when {
             c < 3 -> {
-                str = (nNew % 10).toString() + str
+                val a = (nNew % 10).toString()
+                str = "$a + $str"
                 c++
             }
 
@@ -351,8 +335,8 @@ fun three(n: Int): List<String> { //разбиваю число на списо�
     }
     list.add(str)
     return list
-}
-fun russian(n: Int): List<String> {
+}*/
+fun russian(n: Int): List<String> = TODO()
     /**val one = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
     val ten = listOf("", "десять", "двадцать", "тридцать", "сорок", "пятьдесят",
             "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
@@ -380,6 +364,5 @@ fun russian(n: Int): List<String> {
         } else {
 
         }
-    }*/
-    return TODO()
-}
+    }
+}*/
