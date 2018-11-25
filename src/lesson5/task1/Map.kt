@@ -184,7 +184,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
 
     var trggr = false
     for ((a, b) in stuff) {
-        if (!trggr && b.first == kind && b.second > chD) {
+        if (!trggr && b.first == kind) {
             chD = b.second
             chS = a
             trggr = true
