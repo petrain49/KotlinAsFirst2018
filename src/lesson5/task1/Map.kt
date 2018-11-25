@@ -115,18 +115,15 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val ans = mutableMapOf<Int, List<String>>()
-    val list = mutableListOf<MutableList<String>>(mutableListOf(),
-            mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
-
+    val ans = mutableMapOf<Int, MutableList<String>>()
     for ((k, v) in grades) {
-        list[v].add(k)
+        if (ans[v] == null) ans[v] = mutableListOf(k)
+        else {
+            ans[v]!!.add(k)
+        }
     }
-    for (x in 0..5) {
-        if (list[x].isNotEmpty()) ans.put(x, list[x].sorted().reversed())
-    }
-    println(list)
-    return ans
+    ans.map{it.value.sort()}
+    return ans.toSortedMap(compareBy{-it})
 }
 
 /**
@@ -155,12 +152,16 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val ans = mutableMapOf<String, Double>()
+    val ansS = mutableMapOf<String, MutableList<Double>>()
     for ((a, b) in stockPrices) {
-        if (a !in ans) ans[a] = b
-        else ans[a] = ((ans[a] ?: 0.0) + b) / 2
+        if (a !in ansS) ansS[a] = mutableListOf(b)
+        else ansS[a]!!.add(b)
     }
-    return ans
+
+    val ansF = mutableMapOf<String, Double>()
+    for ((a, b) in ansS) ansF[a] = b.sum() / b.size
+
+    return ansF
 }
 
 /**
@@ -231,7 +232,6 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         for (i in v.toList()) {
             if (i in friends.keys) {
                 ans[k]?.addAll(friends[i]!!)
-                ans[k]!!.remove(k)
             }
         }
     }
@@ -326,7 +326,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val set = list.toSet()
     var a = -1
     var b = -1
-    for (x in 0 until number){
+    for (x in 0..number){
         if (x != (number - x)) {
             if (x in set && (number - x) in set) {
                 a = list.indexOf(x)
