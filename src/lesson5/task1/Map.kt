@@ -262,7 +262,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Boolean =
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter {it in b}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter {it in b}.toSet().toList()
 
 /**
  * Средняя
@@ -326,7 +326,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val set = list.toSet()
     var a = -1
     var b = -1
-    for (x in 1 until number){
+    for (x in 0 until number){
         if (x != (number - x)) {
             if (x in set && (number - x) in set) {
                 a = list.indexOf(x)
