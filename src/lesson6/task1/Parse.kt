@@ -145,13 +145,13 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     var ans = -1
-    if (jumps.matches(Regex("""([\d%\-]+ )*[\d%\-]+$"""))) {
-        val text = Regex("""[\D]+""").replace(jumps, " ").split(" ")
-        for (x in text) {
-            print(text to x)
-            if ((x.matches(Regex("""\d+"""))) && (x.toInt() > ans)) ans = x.toInt()
-        }
+    if (!jumps.matches(Regex("""([\d%\-]+ )*[\d%\-]+$"""))) return ans
+
+    val text = Regex("""[\D]+""").replace(jumps, " ").split(" ")
+    for (x in text) {
+        if ((x.matches(Regex("""\d+"""))) && (x.toInt() > ans)) ans = x.toInt()
     }
+
     return ans
 }
 
@@ -167,13 +167,14 @@ fun bestLongJump(jumps: String): Int {
  */
 fun bestHighJump(jumps: String): Int {
     var ans = -1
-    if (jumps.matches(Regex("""(\d+ [+\-%]+ ?)+"""))) {
-        val list = Regex("""\d+ [+\-%]*\+""").findAll(jumps)
-        for (x in list) {
-            val num = Regex("""\d+""").find(x.value)!!.value.toInt()
-            if (num > ans) ans = num
-        }
+    if (!jumps.matches(Regex("""(\d+ [+\-%]+ ?)+"""))) return ans
+
+    val list = Regex("""\d+ [+\-%]*\+""").findAll(jumps)
+    for (x in list) {
+        val num = Regex("""\d+""").find(x.value)!!.value.toInt()
+        if (num > ans) ans = num
     }
+
     return ans
 }
 
@@ -187,16 +188,16 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.matches(Regex("""(\d+ ?[+\-]? ?)+"""))) {
-        val nums = expression.split(" ")
-        var ans = nums[0].toInt()
-        for (x in 2 until nums.size step 2) {
-            if (nums[x - 1] == "+") ans += nums[x].toInt()
-            else ans -= nums[x].toInt()
-        }
-        return ans
+    if (!expression.matches(Regex("""(\d+ ?[+\-]? ?)+""")))
+        throw IllegalArgumentException()
+
+    val nums = expression.split(" ")
+    var ans = nums[0].toInt()
+    for (x in 2 until nums.size step 2) {
+        if (nums[x - 1] == "+") ans += nums[x].toInt()
+        else ans -= nums[x].toInt()
     }
-    throw IllegalArgumentException()
+    return ans
 }
 
 /**
@@ -217,6 +218,7 @@ fun firstDuplicateIndex(str: String): Int {
         if (x > 0 && list[x] == list[x - 1]) {
             strNew = strNew.replace("${list[x - 1]} ${list[x]}", "V")
             ans = strNew.indexOf("V")
+            break
         }
     }
     return ans
