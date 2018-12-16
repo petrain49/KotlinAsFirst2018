@@ -34,6 +34,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun dateStrToDigit() {
+        assertEquals("18.06.1", dateStrToDigit("18 июня 1"))
         assertEquals("15.07.2016", dateStrToDigit("15 июля 2016"))
         assertEquals("", dateStrToDigit("3 мартобря 1918"))
         assertEquals("18.11.2018", dateStrToDigit("18 ноября 2018"))
@@ -69,6 +70,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun bestLongJump() {
+        assertEquals(2147483647, bestLongJump("1970798348  % 2147483647 - %  1    - %  -   0 - 442956851 -   2147483647    % -   - - - - - 2147483647 %  %  -    -   % - -   - 2147483647  %  0 1151413714   %  -  % - - 452886026 -  - 1449506800 1 574305996   % 570564882   % - - 1 0 2147483647 -  - 1699120702  0 2147483647   1016213853 %   1496323480 1 -   -  %  - 2147483647 -    -  1752221496 - 1239734890 1346109816   %   - 2147483647  % 2024973958  0 - -  -  0   1 1145200675 - -  -    0 % % -    -  2147483647 0  -  -  - - % 484083373 %  - 0   % -  -  -   -  1 1 -"))
         assertEquals(-1, bestLongJump("-"))
         assertEquals(717, bestLongJump("706 % - 717 - 703"))
         assertEquals(-1, bestLongJump("% - - % -"))
@@ -111,6 +113,7 @@ class Tests {
     @Test
     @Tag("Hard")
     fun mostExpensive() {
+        assertEquals("ls|%fe.", mostExpensive("` 20411150.06; p=5JddQZ 21474836.47; ' 21474836.47; GlBn='~%iD~0P!oZ^t`} 21474836.47; 4gu71!HE3u\"\"(A\$e+f%K[&%,Fy7AJUzT6ZMaGy1 6207041.99; zg2&l}Z5n/_CC+H7* 12332648.61; v 21474836.47; .+b)V%*DX)VcNEd0[5v\$KR>^u?iddWW<H3?+Y*@QNr%jV~ziOB%vh!v^UWt:9uq_:%b%CPdFkM|&{p\$UwD87AQJ%8|Ot-C%]Wi_XMW9Q[`Q*_Y}=B^,5FmuI!?PBfN>>rO 0.01; ls|%fe. 21474836.47; :]}%kG\\6]h{b 0.01; Ro[p]kol.7S%Ka`%gzSD/o(57PGN%%j5&(,3.z[8`@%2%^[(wCNn.kEO]\\8U2w..?HVpv+:AOilSA#yNxM?.$,2C*ACSdf=j^kM_iDIc>I3e),D+1FtGp8O8-nAOpv8(^az7s@MWF%}9#t\"?rL8XSW!vkP.)1 0; {??zU`r[c%@j 0.01"))
         assertEquals("", mostExpensive(""))
         assertEquals("Курица", mostExpensive("Хлеб 39.9; Молоко 62.5; Курица 184.0; Конфеты 89.9"))
         assertEquals("Вино", mostExpensive("Вино 255.0"))

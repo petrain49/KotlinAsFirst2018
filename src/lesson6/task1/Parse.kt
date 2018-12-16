@@ -84,7 +84,7 @@ fun dateStrToDigit(str: String): String {
         val b = map[strNew[1]]!!.toInt()
         val c = strNew[2].toInt()
 
-        if (daysInMonth(b, c) >= a) return String.format("%02d.%02d.%02d", a, b, c)
+        if (daysInMonth(b, c) >= a) return String.format("%02d.%02d.%d", a, b, c)
     }
     return ""
 }
@@ -110,7 +110,7 @@ fun dateDigitToStr(digital: String): String {
             val a = strNew[0].toInt()
             val b = map[strNew[1]]
             val c = strNew[2].toInt()
-            return String.format("%1d %s %02d", a, b, c)
+            return String.format("%1d %s %d", a, b, c)
         }
     }
     return ""
@@ -145,9 +145,9 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     var ans = -1
-    if (!jumps.matches(Regex("""([\d%\-]+ )*[\d%\-]+$"""))) return ans
+    if (!jumps.matches(Regex("""([\d%\- ]+ )*[\d%\- ]+$"""))) return ans
 
-    val text = Regex("""[\D]+""").replace(jumps, " ").split(" ")
+    val text = Regex("""[\D ]+""").replace(jumps, " ").split(" ")
     for (x in text) {
         if ((x.matches(Regex("""\d+"""))) && (x.toInt() > ans)) ans = x.toInt()
     }
@@ -169,9 +169,10 @@ fun bestHighJump(jumps: String): Int {
     var ans = -1
     if (!jumps.matches(Regex("""(\d+ [+\-%]+ ?)+"""))) return ans
 
-    val list = Regex("""\d+ [+\-%]*\+""").findAll(jumps)
+    val list = Regex("""\d+ [+\-%]*\++""").findAll(jumps)
+    var num = 0
     for (x in list) {
-        val num = Regex("""\d+""").find(x.value)!!.value.toInt()
+        num = Regex("""\d+""").find(x.value)!!.value.toInt()
         if (num > ans) ans = num
     }
 
@@ -237,14 +238,14 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     var ans = ""
-    if (!description.matches(Regex("""([a-zA-Zа-яА-Я]+ [\d.]+;? ?)+"""))) return ans
+    if (!description.matches(Regex("""(.+ [\d.]+;? ?)+"""))) return ans
 
     val list = description.split("; ")
     val listPrices = mutableMapOf<Double, String>()
 
     for (x in list)
-        listPrices[Regex("""[\d.]+""").find(x)!!.value.toDouble()] =
-                Regex("""[a-zA-Zа-яА-Я]+""").find(x)!!.value
+        listPrices[Regex("""[\d]+""").find(x)!!.value.toDouble()] =
+                Regex("""[^\d ]+""").find(x)!!.value
     ans = listPrices[listPrices.keys.max()]!! //!!!!!!!!!!!!!
 
     return ans

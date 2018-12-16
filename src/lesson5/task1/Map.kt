@@ -230,6 +230,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         for (i in v.toList()) {
             if (i in friends.keys) {
                 ans[k]!!.addAll(friends[i]!!)
+                if (k in ans[k]!!) ans[k]!!.remove(k)
             }
         }
     }
@@ -325,13 +326,21 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var a = -1
     var b = -1
 
-    val m = mutableMapOf<Int, Int>()
-    for (x in (list.size - 1) downTo 0) m[list[x]] = x
+    val m = mutableMapOf<Int, MutableList<Int>>()
+    for (x in 0 until list.size) {
+        if (list[x] !in m) m[list[x]] = mutableListOf(x)
+        else m[list[x]]!!.add(x)
+    }
 
     for (x in 0..number) {
-        if (x in m && (number - x) in m && m[x] != m[number - x]) {
-            a = m[x]!!
-            b = m[number - x]!!
+        if (x in m && (number - x) in m && x != (number - x)) {
+            a = m[x]!![0]
+            b = m[number - x]!![0]
+            break
+        }
+        else if (x in m && (number - x) in m && x == (number - x) && m[x]!!.size > 1) {
+            a = m[x]!![0]
+            b = m[x]!![1]
             break
         }
     }
