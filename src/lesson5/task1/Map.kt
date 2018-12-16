@@ -116,14 +116,12 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val ans = mutableMapOf<Int, MutableList<String>>()
+
     for ((k, v) in grades) {
-        if (ans[v] == null) ans[v] = mutableListOf(k)
-        else {
-            ans[v]!!.add(k)
-        }
+        if (v in ans) ans[v]!!.add(k)
+        else ans[v] = mutableListOf(k)
     }
-    ans.map{it.value.sort()}
-    return ans.toSortedMap(compareBy{-it})
+    return ans
 }
 
 /**
@@ -180,22 +178,22 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var chD = 0.0
-    var chS: String? = null
+    var coast = 0.0
+    var name: String? = null
 
     var trggr = false
     for ((a, b) in stuff) {
         if (!trggr && b.first == kind) {
-            chD = b.second
-            chS = a
+            coast = b.second
+            name = a
             trggr = true
         }
-        else if (trggr && b.first == kind && b.second < chD) {
-            chD = b.second
-            chS = a
+        else if (trggr && b.first == kind && b.second < coast) {
+            coast = b.second
+            name = a
         }
     }
-    return chS
+    return name
 }
 
 /**
@@ -231,11 +229,11 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         ans[k] = v.toMutableSet()
         for (i in v.toList()) {
             if (i in friends.keys) {
-                ans[k]?.addAll(friends[i]!!)
+                ans[k]!!.addAll(friends[i]!!)
             }
         }
     }
-    for (l in list) ans[l] = mutableSetOf("")
+    for (l in list) ans[l] = mutableSetOf()
 
     return ans
 }
@@ -262,7 +260,8 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Boolean =
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter {it in b}.toSet().toList()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> =
+        a.toSet().filter{it in b.toSet()}.toList()
 
 /**
  * Средняя
@@ -274,7 +273,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter {it 
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean =
-        word.toLowerCase().all {it in chars.map {it.toLowerCase()}}
+        word.toLowerCase().toSet().all{it in chars.joinToString().toLowerCase().toSet()}
 
 /**
  * Средняя
@@ -289,7 +288,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean =
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> =
-        list.groupingBy {it} .eachCount().filterValues {it != 1}
+        list.groupingBy{it}.eachCount().filterValues{it != 1}
 
 /**
  * Средняя
@@ -323,17 +322,18 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val set = list.toSet()
     var a = -1
     var b = -1
-    for (x in 0..number){
-        if (x != (number - x)) {
-            if (x in set && (number - x) in set) {
-                a = list.indexOf(x)
-                b = list.indexOf(number - x)
-            }
+
+    val m = mutableMapOf<Int, Int>()
+    for (x in (list.size - 1) downTo 0) m[list[x]] = x
+
+    for (x in 0..number) {
+        if (x in m && (number - x) in m && m[x] != m[number - x]) {
+            a = m[x]!!
+            b = m[number - x]!!
+            break
         }
-        else break
     }
     if (a <= b) return a to b
     return b to a
@@ -359,3 +359,4 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+    //val ans = treasures.filter{it.value.first <= capacity}.toMutableMap()

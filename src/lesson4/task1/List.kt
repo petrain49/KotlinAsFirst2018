@@ -189,17 +189,27 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> {
-    var nNew = n
-    var i = n
-    val answrs = mutableListOf<Int>()
-    while (nNew > 1) {
-        while (nNew % i == 0 && isPrime(i)) {
-            answrs.add(i)
-            nNew /= i
+    if (isPrime(n)) return listOf(n)
+    var nn = n
+    var xx = false
+    var ans = mutableListOf<Int>()
+
+    while (nn > 1) {
+        for (x in 2..sqrt(nn.toDouble()).toInt() + 1) {
+            xx = false
+            if (nn % x == 0) {
+                xx = true
+                ans.add(x)
+                nn /= x
+                break
+            }
         }
-        i--
+        if (!xx) {
+            ans.add(nn)
+            break
+        }
     }
-    return answrs.sorted()
+    return ans
 }
 
 /**
@@ -274,7 +284,9 @@ fun decimalFromString(str: String, base: Int): Int {
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
 
     val ans = mutableListOf<Int>()
-    str.map {ans.add(list.indexOf(it.toString()))}
+    for (x in str) {
+        ans.add(list.indexOf(x.toString()))
+    }
     return decimal(ans, base)
 }
 
@@ -293,11 +305,13 @@ fun roman(n: Int): String {
             Pair(900, "CM"), Pair(1000, "M")).reversed()
     val ans = StringBuilder()
     var x = n
+    var pe = 0
 
     while (x > 0) {
-        for ((a, b) in list) if (x - a >= 0) {
-            x -= a
-            ans.append(b)
+        for (i in list.subList(pe, 13)) if (x - i.first >= 0) {
+            pe = list.indexOf(i)
+            x -= i.first
+            ans.append(i.second)
             break
         }
     }

@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -71,7 +73,21 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    var map = mapOf("января" to "01", "февраля" to "02", "марта" to "03", "апреля" to "04",
+            "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08", "сентября" to "09",
+            "октября" to "10", "ноября" to "11", "декабря" to "12")
+    var strNew = str.split(" ")
+
+    if (strNew.size == 3) if (strNew[1] in map.keys && strNew[0].toInt() < 32) {
+        val a = strNew[0].toInt()
+        val b = map[strNew[1]]!!.toInt()
+        val c = strNew[2].toInt()
+
+        if (daysInMonth(b, c) >= a) return String.format("%02d.%02d.%02d", a, b, c)
+    }
+    return ""
+}
 
 /**
  * Средняя
@@ -83,7 +99,22 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    var map = mapOf("01" to "января", "02" to "февраля", "03" to "марта", "04" to "апреля",
+            "05" to "мая", "06" to "июня", "07" to "июля", "08" to "августа", "09" to "сентября",
+            "10" to "октября", "11" to "ноября", "12" to "декабря")
+    var strNew = digital.split(".")
+
+    if (strNew.size == 3) if (strNew[1] in map.keys && strNew[0].toInt() < 32) {
+        if (daysInMonth(strNew[1].toInt(), strNew[2].toInt()) >= strNew[0].toInt()) {
+            val a = strNew[0].toInt()
+            val b = map[strNew[1]]
+            val c = strNew[2].toInt()
+            return String.format("%1d %s %02d", a, b, c)
+        }
+    }
+    return ""
+}
 
 /**
  * Средняя
@@ -97,7 +128,10 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    if (phone.contains(Regex("""[^-+ )(\d]"""))) return ""
+    return Regex("""[ \-()]""").replace(phone, "")
+}
 
 /**
  * Средняя
@@ -109,7 +143,17 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    var ans = -1
+    if (jumps.matches(Regex("""([\d%\-]+ )*[\d%\-]+$"""))) {
+        val text = Regex("""[\D]+""").replace(jumps, " ").split(" ")
+        for (x in text) {
+            print(text to x)
+            if ((x.matches(Regex("""\d+"""))) && (x.toInt() > ans)) ans = x.toInt()
+        }
+    }
+    return ans
+}
 
 /**
  * Сложная
@@ -121,7 +165,17 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var ans = -1
+    if (jumps.matches(Regex("""(\d+ [+\-%]+ ?)+"""))) {
+        val list = Regex("""\d+ [+\-%]*\+""").findAll(jumps)
+        for (x in list) {
+            val num = Regex("""\d+""").find(x.value)!!.value.toInt()
+            if (num > ans) ans = num
+        }
+    }
+    return ans
+}
 
 /**
  * Сложная
@@ -132,7 +186,18 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (expression.matches(Regex("""(\d+ ?[+\-]? ?)+"""))) {
+        val nums = expression.split(" ")
+        var ans = nums[0].toInt()
+        for (x in 2 until nums.size step 2) {
+            if (nums[x - 1] == "+") ans += nums[x].toInt()
+            else ans -= nums[x].toInt()
+        }
+        return ans
+    }
+    throw IllegalArgumentException()
+}
 
 /**
  * Сложная
@@ -143,7 +208,19 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    var ans = -1
+    var strNew = str.toLowerCase()
+    val list = strNew.split(" ")
+
+    for (x in 0 until list.size) {
+        if (x > 0 && list[x] == list[x - 1]) {
+            strNew = strNew.replace("${list[x - 1]} ${list[x]}", "V")
+            ans = strNew.indexOf("V")
+        }
+    }
+    return ans
+}
 
 /**
  * Сложная
@@ -156,7 +233,20 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    var ans = ""
+    if (!description.matches(Regex("""([a-zA-Zа-яА-Я]+ [\d.]+;? ?)+"""))) return ans
+
+    val list = description.split("; ")
+    val listPrices = mutableMapOf<Double, String>()
+
+    for (x in list)
+        listPrices[Regex("""[\d.]+""").find(x)!!.value.toDouble()] =
+                Regex("""[a-zA-Zа-яА-Я]+""").find(x)!!.value
+    ans = listPrices[listPrices.keys.max()]!! //!!!!!!!!!!!!!
+
+    return ans
+}
 
 /**
  * Сложная
@@ -169,7 +259,19 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    if (!Regex("[IVXLCDM]+").matches(roman)) return -1
+    val map = mapOf("I" to 1, "IV" to 4, "V" to 5,
+            "IX" to 9, "X" to 10, "XL" to 40, "L" to 50,
+            "XC" to 90, "C" to 100, "CD" to 400, "D" to 500,
+            "CM" to 900, "M" to 1000)
+
+    var ans = 0
+    for (x in Regex("""CM|CD|XC|XL|IX|IV|M|D|C|L|X|V|I""").findAll(roman))
+        ans += map[x.value]!!
+
+    return ans
+    }
 
 /**
  * Очень сложная
