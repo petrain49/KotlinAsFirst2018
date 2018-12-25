@@ -189,7 +189,6 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> {
-    if (isPrime(n)) return listOf(n)
     var nn = n
     var xx = false
     var ans = mutableListOf<Int>()
@@ -303,15 +302,16 @@ fun roman(n: Int): String {
             Pair(9, "IX"), Pair(10, "X"), Pair(40, "XL"), Pair(50, "L"),
             Pair(90, "XC"), Pair(100, "C"), Pair(400, "CD"), Pair(500, "D"),
             Pair(900, "CM"), Pair(1000, "M")).reversed()
+
     val ans = StringBuilder()
     var x = n
     var pe = 0
 
     while (x > 0) {
-        for (i in list.subList(pe, 13)) if (x - i.first >= 0) {
-            pe = list.indexOf(i)
-            x -= i.first
-            ans.append(i.second)
+        for (i in pe until list.size) if (x - list[i].first >= 0) {
+            pe = i
+            x -= list[i].first
+            ans.append(list[i].second)
             break
         }
     }

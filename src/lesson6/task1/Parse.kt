@@ -246,7 +246,7 @@ fun mostExpensive(description: String): String {
     for (x in list)
         listPrices[Regex("""[\d]+""").find(x)!!.value.toDouble()] =
                 Regex("""[^\d ]+""").find(x)!!.value
-    ans = listPrices[listPrices.keys.max()]!! //!!!!!!!!!!!!!
+    ans = listPrices[listPrices.keys.max()]!!
 
     return ans
 }

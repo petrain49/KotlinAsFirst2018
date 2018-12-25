@@ -302,7 +302,7 @@ class Tests {
         )
         assertEquals(
                 Pair(0, 2),
-                findSumOfTwo(listOf(1, 2, 3), 4)
+                findSumOfTwo(listOf(1, 2, 3, 31, 35), 4)
         )
         assertEquals(
                 Pair(-1, -1),
@@ -315,7 +315,7 @@ class Tests {
         1, 47777, 37684, 1), 1)
         )
         assertEquals(
-                Pair(4, 5),
+                Pair(4, 8),
                 findSumOfTwo(listOf(11861,
                         18429,
                         29269,

@@ -178,17 +178,12 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var coast = 0.0
+    var coast = stuff.toList()[0].second.second
     var name: String? = null
 
-    var trggr = false
+    println(coast)
     for ((a, b) in stuff) {
-        if (!trggr && b.first == kind) {
-            coast = b.second
-            name = a
-            trggr = true
-        }
-        else if (trggr && b.first == kind && b.second < coast) {
+        if (b.first == kind && b.second <= coast) {
             coast = b.second
             name = a
         }
@@ -262,7 +257,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Boolean =
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> =
-        a.toSet().filter{it in b.toSet()}.toList()
+        a.intersect(b).toList()
 
 /**
  * Средняя
@@ -273,8 +268,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> =
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean =
-        word.toLowerCase().toSet().all{it in chars.joinToString().toLowerCase().toSet()}
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val chNew = chars.joinToString().toLowerCase().toSet()
+    return word.toLowerCase().toSet().all {it in chNew}
+}
 
 /**
  * Средняя
@@ -289,7 +286,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean =
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> =
-        list.groupingBy{it}.eachCount().filterValues{it != 1}
+        list.groupingBy {it}.eachCount().filterValues{it != 1}
 
 /**
  * Средняя
@@ -323,29 +320,23 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var a = -1
-    var b = -1
+    val set = list.toSet()
+    var a = 0
+    var b = 0
 
-    val m = mutableMapOf<Int, MutableList<Int>>()
-    for (x in 0 until list.size) {
-        if (list[x] !in m) m[list[x]] = mutableListOf(x)
-        else m[list[x]]!!.add(x)
-    }
+    if (number in set && 0 !in set) return -1 to -1
 
-    for (x in 0..number) {
-        if (x in m && (number - x) in m && x != (number - x)) {
-            a = m[x]!![0]
-            b = m[number - x]!![0]
-            break
-        }
-        else if (x in m && (number - x) in m && x == (number - x) && m[x]!!.size > 1) {
-            a = m[x]!![0]
-            b = m[x]!![1]
-            break
+    for (x in number downTo 0) {
+        a = x
+        b = number - x
+
+        if (a in set && b in set && list.indexOf(a) != list.lastIndexOf(b)) {
+            val ans = setOf(list.indexOf(a), list.lastIndexOf(b))
+            return ans.min()!! to ans.max()!!
         }
     }
-    if (a <= b) return a to b
-    return b to a
+
+    return -1 to -1
 }
 
 /**
