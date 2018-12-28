@@ -74,19 +74,20 @@ fun main(args: Array<String>) {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    var map = mapOf("января" to "01", "февраля" to "02", "марта" to "03", "апреля" to "04",
+    val map = mapOf("января" to "01", "февраля" to "02", "марта" to "03", "апреля" to "04",
             "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08", "сентября" to "09",
             "октября" to "10", "ноября" to "11", "декабря" to "12")
-    var strNew = str.split(" ")
+    val strNew = str.split(" ")
 
-    if (strNew.size == 3) if (strNew[1] in map.keys && strNew[0].toInt() < 32) {
-        val a = strNew[0].toInt()
-        val b = map[strNew[1]]!!.toInt()
-        val c = strNew[2].toInt()
+    if (strNew.size != 3 || strNew[1] !in map.keys || strNew[0].toInt() >= 32)
+        return ""
 
-        if (daysInMonth(b, c) >= a) return String.format("%02d.%02d.%d", a, b, c)
-    }
-    return ""
+    val a = strNew[0].toInt()
+    val b = map[strNew[1]]!!.toInt()
+    val c = strNew[2].toInt()
+
+    if (daysInMonth(b, c) < a) return ""
+    return String.format("%02d.%02d.%d", a, b, c)
 }
 
 /**
@@ -100,20 +101,19 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    var map = mapOf("01" to "января", "02" to "февраля", "03" to "марта", "04" to "апреля",
+    val map = mapOf("01" to "января", "02" to "февраля", "03" to "марта", "04" to "апреля",
             "05" to "мая", "06" to "июня", "07" to "июля", "08" to "августа", "09" to "сентября",
             "10" to "октября", "11" to "ноября", "12" to "декабря")
-    var strNew = digital.split(".")
+    val strNew = digital.split(".")
 
-    if (strNew.size == 3) if (strNew[1] in map.keys && strNew[0].toInt() < 32) {
-        if (daysInMonth(strNew[1].toInt(), strNew[2].toInt()) >= strNew[0].toInt()) {
-            val a = strNew[0].toInt()
-            val b = map[strNew[1]]
-            val c = strNew[2].toInt()
-            return String.format("%1d %s %d", a, b, c)
-        }
-    }
-    return ""
+    if (strNew.size != 3 || strNew[1] !in map.keys || strNew[0].toInt() >= 32
+            || daysInMonth(strNew[1].toInt(), strNew[2].toInt()) < strNew[0].toInt())
+        return ""
+
+    val a = strNew[0].toInt()
+    val b = map[strNew[1]]
+    val c = strNew[2].toInt()
+    return String.format("%1d %s %d", a, b, c)
 }
 
 /**
