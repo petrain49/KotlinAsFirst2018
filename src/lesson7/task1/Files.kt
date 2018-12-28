@@ -55,12 +55,18 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val subNew = substrings.map {it.toLowerCase()}
+    //val subNew = substrings.map {it.toLowerCase()}
     val ans = mutableMapOf<String, Int>()
     val input = File(inputName).readText().toLowerCase()
+    for (x in substrings) ans[x] = 0
 
-    for (l in 0 until subNew.size)
-        ans[substrings[l]] = subNew[l].toRegex().findAll(input).toList().size
+    for (a in substrings) {
+        for (b in a.length until input.length) {
+            if (input.substring(b - a.length, b) == a.toLowerCase()) {
+                ans[a] = ans[a]!! + 1
+            }
+        }
+    }
     return ans
 }
 
@@ -211,8 +217,8 @@ fun top20Words(inputName: String): Map<String, Int> {
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
     var text = File(inputName).readText().toLowerCase()
-    for (d in dictionary) text = text.replace(d.key.toString().toLowerCase(), d.value)
-    File(outputName).writeText(text.toLowerCase().capitalize())
+    for (d in dictionary) text = text.replace(d.key.toString().toLowerCase(), d.value.toLowerCase())
+    File(outputName).writeText(text.capitalize())
 }
 
 /**
