@@ -4,6 +4,48 @@ package lesson7.task1
 
 import java.io.File
 
+//Бибишев Петр 13531/5, билет 2
+fun weather(inputName: String, days: String): Int {
+    val input = File(inputName).readLines()
+    val map = mutableMapOf<String, List<Int>>()
+
+    //из файла в словарь
+    for (x in input) {
+        val list =
+                Regex("""[\d ]+""").find(x)!!.value.split(Regex("""[ ]+""")).filter {it != ""}.map {it.toInt()}
+        map[Regex("""[а-яА-Я]+""").find(x)!!.value] = list
+    }
+
+    //границы, ответ
+    val borders = Regex("""\d+""").findAll(days)!!.map {it.value.toInt() - 1}.toList()
+    val firstB = borders[0]
+    val secondB = borders[1]
+
+    val months = Regex("""[а-яА-Я]+""").findAll(days)!!.map {it.value}.toList()
+    var ans = 0
+
+    //перебор списков
+    if (months.size == 1) return map[months[0]]!!.subList(borders[0], borders[1]).max()!!
+
+    else {
+        val firstM = map.keys.indexOf(months[0])
+        val secondM = map.keys.indexOf(months[1])
+
+        for (x in map.toList().subList(firstM, secondM + 1)) {
+            if (x.first == months[0]) ans = x.second.subList(borders[0], x.second.size - 1).max()!!
+
+            else if (x.first == months[1]) ans = listOf(x.second.subList(0, borders[1]).max()!!, ans).max()!!
+
+            else ans = maxOf(x.second.max()!!, ans)
+        }
+    }
+    return ans
+}
+
+
+
+
+
 /**
  * Пример
  *

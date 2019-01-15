@@ -64,6 +64,14 @@ Basic, Ruby, Swift.
                 countSubstrings("input/substrings_in1.txt", listOf("Карминовый", "Некрасивый", "белоглазый")))
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    @Test
+    fun weather() {
+        assertEquals(48, weather("input/Weather.txt", "Март 4..Май 15"))
+        assertEquals(18, weather("input/Weather.txt", "Апрель 15..Май 2"))
+        assertEquals(30, weather("input/Weather.txt", "Май 4..10"))
+    }
+
     @Test
     @Tag("Normal")
     fun sibilants() {
